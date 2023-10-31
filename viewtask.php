@@ -73,7 +73,8 @@ include 'includes/navbar.php';
                                     </div>
                                     <br>
                                     <button type="submit" name="UpdateTask" class="btn btn-primary">Update</button> <a
-                                        href="index.php" class="btn btn-danger">Cancel</a>
+                                        href="index.php" class="btn btn-warning">Cancel</a> <a
+                                        href="deletetask.php?task=<?php echo $row['id'] ?>" class="btn btn-danger">Delete</a>
                                 </form>
                             </div>
                         <?php }

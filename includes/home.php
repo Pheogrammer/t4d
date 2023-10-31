@@ -54,12 +54,33 @@
                                                 <?php echo date("d-m-Y", strtotime($row["created_at"])) ?>
                                             </td>
                                             <td>
-                                                <?php echo $row["status"] ?>
+                                                <?php
+                                                $status = $row["status"];
+                                                $pillClass = "";
+                                                switch ($status) {
+                                                    case "Pending":
+                                                        $pillClass = "btn btn-danger"; // Red for Pending
+                                                        break;
+                                                    case "In Progress":
+                                                        $pillClass = "btn btn-warning"; // Yellow for On Progress
+                                                        break;
+                                                    case "Completed":
+                                                        $pillClass = "btn btn-success"; // Green for Completed
+                                                        break;
+                                                    default:
+                                                        $pillClass = "btn btn-secondary"; // Default (optional)
+                                                }
+                                                ?>
+
+                                                <span class="<?php echo $pillClass; ?>">
+                                                    <?php echo $status; ?>
+                                                </span>
                                             </td>
                                             <td>
                                                 <div class="row ${1| ,row-cols-2,row-cols-3, auto,justify-content-md-center,|}">
                                                     <div class="col-md-3">
-                                                        <a href="viewtask.php?task=<?php echo $row['id'] ?>" class="btn btn-primary">View</a>
+                                                        <a href="viewtask.php?task=<?php echo $row['id'] ?>"
+                                                            class="btn btn-primary">View</a>
                                                     </div>
                                                 </div>
                                             </td>
