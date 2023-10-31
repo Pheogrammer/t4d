@@ -20,14 +20,14 @@ if (isset($_POST['UpdateTask'])) {
     $task = $_POST['task'];
     $id = $_POST['id'];
     $status = $_POST['status'];
-    $created_at = date('Y-m-d H:i:s');
+    $updated_at = date('Y-m-d H:i:s');
     
     // Create a prepared statement
-    $query = "UPDATE task_store SET task_name = ?, status = ?, created_at = ? WHERE id = ?";
+    $query = "UPDATE task_store SET task_name = ?, status = ?, updated_at = ? WHERE id = ?";
     $stmt = $conn->prepare($query);
     
     // Bind parameters to the prepared statement
-    $stmt->bind_param("sssi", $task, $status, $created_at, $id);
+    $stmt->bind_param("sssi", $task, $status, $updated_at, $id);
     
     // Execute the prepared statement
     if ($stmt->execute()) {
