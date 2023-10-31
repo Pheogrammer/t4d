@@ -1,8 +1,11 @@
 <?php // Include navbar.php
-include 'navbar.php';
+include 'includes/dbconn.php';
+include 'includes/queries.php';
+include 'includes/navbar.php';
 
-// Your index.php content goes here
+// Include homepage
+include 'includes/home.php';
 
 // Include footer.php
-include 'footer.php';
+include 'includes/footer.php';
 ?>
