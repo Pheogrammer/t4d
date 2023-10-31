@@ -2,17 +2,35 @@
 include 'includes/dbconn.php';
 
 if (isset($_POST['addTask'])) {
+    // Get user inputs and sanitize them if necessary
     $task = $_POST['task'];
     $status = $_POST['status'];
     $created_at = date('Y-m-d H:i:s');
 
-    $query = "INSERT INTO task_store (task_name, status, created_at) VALUES ('$task', '$status', '$created_at')";
-    $result = $conn->query($query);
+    // Create a prepared statement
+    $query = "INSERT INTO task_store (task_name, status, created_at) VALUES (?, ?, ?)";
+    $stmt = $conn->prepare($query);
+
+    // Bind parameters to the prepared statement
+    $stmt->bind_param("sss", $task, $status, $created_at);
+
+    // Execute the prepared statement
+    if ($stmt->execute()) {
+        // The task was successfully created
+        session_start();
+        $_SESSION['message'] = "Task created successfully!";
+    } else {
+        // An error occurred
+        // You might want to add error handling here, such as setting a session message
+    }
+
+    // Close the prepared statement
+    $stmt->close();
+
+    // Redirect to 'index.php'
     header('Location: index.php');
-    session_start();
-    $_SESSION['message'] = "Task created successfully!";
-    $conn->close();
 }
+
 include 'includes/navbar.php';
 ?>
 <section class="bg-light">

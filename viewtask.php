@@ -16,21 +16,38 @@ $result = $conn->query($sql);
 
 
 if (isset($_POST['UpdateTask'])) {
+    // Get the user inputs
     $task = $_POST['task'];
     $id = $_POST['id'];
     $status = $_POST['status'];
     $created_at = date('Y-m-d H:i:s');
-
-    $query = "UPDATE task_store
-    SET task_name = '$task', status = '$status', created_at = '$created_at'
-    WHERE id = $id;
-    ";
-    $result = $conn->query($query);
+    
+    // Create a prepared statement
+    $query = "UPDATE task_store SET task_name = ?, status = ?, created_at = ? WHERE id = ?";
+    $stmt = $conn->prepare($query);
+    
+    // Bind parameters to the prepared statement
+    $stmt->bind_param("sssi", $task, $status, $created_at, $id);
+    
+    // Execute the prepared statement
+    if ($stmt->execute()) {
+        session_start();
+        $_SESSION['message'] = "Task updated successfully!";
+    } else {
+        session_start();
+        $_SESSION['message'] = "Task update failed!";
+    }
+    
+    // Close the prepared statement
+    $stmt->close();
+    
+    // Redirect to index.php
     header('Location: index.php');
-    session_start();
-    $_SESSION['message'] = "Task created successfully!";
+    
+    // Close the database connection
     $conn->close();
 }
+
 include 'includes/navbar.php';
 ?>
 
@@ -74,7 +91,7 @@ include 'includes/navbar.php';
                                     <br>
                                     <button type="submit" name="UpdateTask" class="btn btn-primary">Update</button> <a
                                         href="index.php" class="btn btn-warning">Cancel</a> <a
-                                        href="deletetask.php?task=<?php echo $row['id'] ?>" class="btn btn-danger">Delete</a>
+                                        href="delete.php?task=<?php echo $row['id'] ?>" onclick="return confirm('Are you sure you want to delete this item?');" class="btn btn-danger">Delete</a>
                                 </form>
                             </div>
                         <?php }
